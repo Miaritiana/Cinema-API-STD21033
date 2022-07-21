@@ -1,0 +1,309 @@
+openapi: 3.0.1
+info:
+  title: CINEMA-STD21033-API
+  version: 1.0.0
+servers:
+- url: https://STD21033.com
+tags:
+- name: film
+- name: projection
+paths:
+  /film:
+    post:
+      tags:
+      - film
+      summary: Add a new film to the projection
+      operationId: addfilm
+      requestBody:
+        description: film object that needs to be added to the projection
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/film'
+        required: true
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+    get:
+      tags:
+      - film
+      summary: Finds films by status
+      description: Multiple status values can be provided with comma separated strings
+      operationId: findfilmsByStatus
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/film'
+        400:
+          description: Bad request
+      
+
+  /film/{Title}:
+    get:
+      tags:
+      - film
+      summary: Find film by Title
+      description: Returns a single film
+      operationId: getfilmById
+      parameters:
+      - name: Title
+        in: path
+        description: Title of film to return
+        required: true
+        schema:
+          type: string
+
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/film'
+        400:
+          description: Bad request
+          content: {}
+        404:
+          description: film not found
+          content: {}
+    post:
+      tags:
+      - film
+      summary: Updates a film in the projection with form data
+      operationId: updatefilmWithForm
+      parameters:
+      - name: Title
+        in: path
+        description: Title of film that needs to be updated
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                name:
+                  type: string
+                  description: Updated name of the film
+                status:
+                  type: string
+                  description: Updated status of the film
+      responses:
+        400:
+          description: Bad request
+    patch:
+      tags:
+      - film
+      summary: Update an existing film
+      operationId: updatefilm
+      requestBody:
+        description: film object that needs to be added to the projection
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/film'
+            examples:
+              ChangeTitle:
+                description: How to change title of film
+                value:
+                  Title: "New title"
+              ChangeDirector:
+                description: How to change director of film
+                value:
+                  Director: "New director"
+              ChangeDuration:
+                description: change duration
+                value:
+                  Duration: "00:30:00"
+              ChangeSynopsis:
+                description: change synopsis
+                value:
+                  synopsis: "New synopsis"
+        required: true
+      responses:
+        400:
+          description: Bad request
+          content: {}
+    put:
+      tags:
+      - film
+      summary: Update an existing film
+      operationId: updatefilm
+      requestBody:
+        description: film object that needs to be added to the projection
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/film'
+        required: true
+      responses:
+        400:
+          description: Bad request
+          content: {}
+    delete:
+      tags:
+      - film
+      summary: Deletes a film
+      operationId: deletefilm
+      parameters:
+      - name: Title
+        in: path
+        description: film id to delete
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        400:
+          description: Bad request
+
+  /projection:
+    get:
+      tags:
+      - projection
+      summary: Returns film inventories by status
+      description: Returns a map of status codes to quantities
+      operationId: getInventory
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/projection'
+    post:
+      tags:
+      - projection
+      summary: Place an projection for a film
+      operationId: placeprojection
+      requestBody:
+        description: projection placed for purchasing the film
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/projection'
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/projection'
+        400:
+          description: Invalid projection
+          content: {}
+      x-codegen-request-body-name: body
+  /projection/{FilmTitle}:
+    get:
+      tags:
+      - projection
+      summary: Get a projection
+      operationId: getprojectionById
+      parameters:
+      - name: projectionId
+        in: path
+        description: Title of film that needs to be fetched
+        required: true
+        schema:
+          maximum: 10.0
+          minimum: 1.0
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/projection'
+        400:
+          description: Bad request
+    put:
+      tags:
+      - projection
+      summary: Update an existing projection
+      operationId: getprojectionById
+      parameters:
+      - name: projectionId
+        in: path
+        description: Title of film that needs to be fetched
+        required: true
+        schema:
+          maximum: 10.0
+          minimum: 1.0
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/projection'
+        400:
+          description: Bad request
+    delete:
+      tags:
+      - projection
+      summary: Delete a projection
+      description: delete a projection
+      operationId: deleteprojection
+      parameters:
+      - name: projectionId
+        in: path
+        description: Title of the projection that needs to be deleted
+        required: true
+        schema:
+          minimum: 1.0
+          type: string
+      responses:
+        400:
+          description: Bad request
+components:
+  schemas:
+    projection:
+      type: object
+      properties:
+        film:
+          $ref: '#/components/schemas/film'
+        Room:
+          $ref: '#/components/schemas/cinemaRoom'
+        ProjectionTime:
+          type: string
+          format: date-time
+    cinemaRoom:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: cinema A
+        capacity:
+          type: integer
+          example: 100
+    film:
+      type: object
+      properties:
+        Title:
+          type: string
+          example: doggie
+        Director:
+          type: string
+          example: "any prod"
+        duration:
+          type: string
+          example: "1:20:00"
+        synopsis:
+          type: string
+        sortedDate:
+          type: string
+          format: date
+
