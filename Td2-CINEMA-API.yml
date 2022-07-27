@@ -124,6 +124,10 @@ paths:
                 description: change synopsis
                 value:
                   synopsis: "New synopsis"
+              ChangeCategory:
+                description: change category
+                value:
+                  category: "New category"
         required: true
       responses:
         400:
@@ -161,7 +165,34 @@ paths:
       responses:
         400:
           description: Bad request
+  /film/{category}:
+    get:
+      tags:
+      - film
+      summary: Find film by category
+      description: Returns a single film
+      operationId: getfilmByCategory
+      parameters:
+      - name: category
+        in: path
+        description: Title of film to return
+        required: true
+        schema:
+          type: string
 
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/film'
+        400:
+          description: Bad request
+          content: {}
+        404:
+          description: film not found
+          content: {}
   /projection:
     get:
       tags:
@@ -206,14 +237,15 @@ paths:
       summary: Get a projection
       operationId: getprojectionById
       parameters:
-      - name: FilmTitle
+      - name: projectionId
         in: path
         description: Title of film that needs to be fetched
         required: true
         schema:
           maximum: 10.0
           minimum: 1.0
-          type: string
+          type: integer
+          format: int64
       responses:
         200:
           description: successful operation
@@ -229,14 +261,15 @@ paths:
       summary: Update an existing projection
       operationId: getprojectionById
       parameters:
-      - name: FilmTItle
+      - name: projectionId
         in: path
         description: Title of film that needs to be fetched
         required: true
         schema:
           maximum: 10.0
           minimum: 1.0
-          type: string
+          type: integer
+          format: int64
       responses:
         200:
           description: successful operation
@@ -253,7 +286,7 @@ paths:
       description: delete a projection
       operationId: deleteprojection
       parameters:
-      - name: FilmTitle
+      - name: projectionId
         in: path
         description: Title of the projection that needs to be deleted
         required: true
@@ -261,6 +294,31 @@ paths:
           minimum: 1.0
           type: string
       responses:
+        400:
+          description: Bad request
+  /projection/{RoomId}:
+    get:
+      tags:
+      - projection
+      summary: Get a projection
+      operationId: getprojectionByRoomId
+      parameters:
+      - name: RoomId
+        in: path
+        description: Title of film that needs to be fetched
+        required: true
+        schema:
+          maximum: 10.0
+          minimum: 1.0
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/projection'
         400:
           description: Bad request
 components:
@@ -306,5 +364,3 @@ components:
           format: date
         category:
           type: string
-          
-
