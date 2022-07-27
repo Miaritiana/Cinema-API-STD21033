@@ -306,4 +306,7 @@ components:
         sortedDate:
           type: string
           format: date
+        category:
+          type: string
+          
 
