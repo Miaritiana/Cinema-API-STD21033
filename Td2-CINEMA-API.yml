@@ -206,15 +206,14 @@ paths:
       summary: Get a projection
       operationId: getprojectionById
       parameters:
-      - name: projectionId
+      - name: FilmTitle
         in: path
         description: Title of film that needs to be fetched
         required: true
         schema:
           maximum: 10.0
           minimum: 1.0
-          type: integer
-          format: int64
+          type: string
       responses:
         200:
           description: successful operation
@@ -230,15 +229,14 @@ paths:
       summary: Update an existing projection
       operationId: getprojectionById
       parameters:
-      - name: projectionId
+      - name: FilmTItle
         in: path
         description: Title of film that needs to be fetched
         required: true
         schema:
           maximum: 10.0
           minimum: 1.0
-          type: integer
-          format: int64
+          type: string
       responses:
         200:
           description: successful operation
@@ -255,7 +253,7 @@ paths:
       description: delete a projection
       operationId: deleteprojection
       parameters:
-      - name: projectionId
+      - name: FilmTitle
         in: path
         description: Title of the projection that needs to be deleted
         required: true
