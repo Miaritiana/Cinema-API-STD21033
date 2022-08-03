@@ -417,6 +417,9 @@ paths:
                   id:
                     type: number
                     example: "1"
+                  day:
+                    type: string
+                    format: day
                   projectionDate:
                     type: string
                     format: date-time
