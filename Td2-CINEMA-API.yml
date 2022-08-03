@@ -392,10 +392,10 @@ paths:
         400:
           description: Bad request
           content: {}
-  /projections/programs:
+  /Calendar:
     get:
       tags:
-        - "Projections"
+        - "Calendar"
       summary: Get all projection in next week
       parameters:
         - name: date
@@ -404,6 +404,7 @@ paths:
           schema:
             type: string
             format: date
+            example:  2022-08-07
       operationId: getNextWeekProjections
       responses:
         200:
